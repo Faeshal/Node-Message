@@ -1,9 +1,10 @@
-const dotenv = require("dotenv").config();
 const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const multer = require("multer");
+const MONGODB_URI = "mongodb://localhost:27017/rest";
+const PORT = 8080;
 
 const feedRoutes = require("./routes/feed");
 const authRoutes = require("./routes/auth");
@@ -59,10 +60,10 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-  .connect(process.env.MONGODB_URI, { useNewUrlParser: true })
+  .connect(MONGODB_URI, { useNewUrlParser: true })
   .then(result => {
-    const server = app.listen(process.env.PORT);
-    console.log("Server Running on : " + process.env.PORT);
+    const server = app.listen(PORT);
+    console.log("Server Running on : " + PORT);
     const io = require("./socket").init(server);
     io.on("connection", socket => {
       console.log("Client connected");
